@@ -3,8 +3,10 @@
 // Mevcutta kullanılacak olan timezonu set eder
 date_default_timezone_set('Europe/Istanbul');
 
+$application['asset_path'] = 'http://destek.lkl';
+
 // Veritabanı bağlantı ayarları
-$appplication['db.options'] = array(
+$application['db.options'] = array(
     'driver'   => 'pdo_mysql',
     'host'     => 'localhost',
     'port'     => '3306',
