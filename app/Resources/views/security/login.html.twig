@@ -1,0 +1,8 @@
+{% extends "layout/loginbase.html.twig" %}
+{% block title %}Giriş{% endblock %}
+{% block content %}
+    {% if error is defined %}
+        {{ error }}
+    {% endif %}
+    {{ form|raw }}
+{% endblock %}

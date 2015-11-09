@@ -17,6 +17,8 @@ class DashboardController
      */
     public function dashboardAction(Application $application)
     {
+       // var_dump($application['orm.em']->getRepository('Destek\Entity\User')->find(1));
+       // exit;
         return $application['twig']->render('dashboard.html.twig');
     }
 }
