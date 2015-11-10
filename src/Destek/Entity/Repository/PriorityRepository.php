@@ -1,6 +1,6 @@
 <?php
 
-namespace Piko\CRM\SalesBundle\Entity\Repository;
+namespace Destek\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
