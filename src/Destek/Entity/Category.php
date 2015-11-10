@@ -1,8 +1,6 @@
 <?php
 
-namespace Piko\CRM\SalesBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+namespace Destek\Entity;
 
 /**
  * Category
