@@ -34,3 +34,15 @@ $application->get('/category/edit/{id}', 'Destek\Controller\CategoriesController
 
 $application->delete('/category/delete/{id}', 'Destek\Controller\CategoriesController::deleteAction')
     ->bind('category_delete')->method('GET|POST')->before($before);
+
+
+// Ticket
+$application->get('/ticket', 'Destek\Controller\TicketController::indexAction')
+    ->bind('ticket')->before($before);
+
+$application->get('/ticket/detail/{id}', 'Destek\Controller\TicketController::detailAction')
+    ->bind('ticket_detail')->method('GET|POST')->before($before);
+
+
+$application->get('/ticket/solve/{id}', 'Destek\Controller\TicketController::solveAction')
+    ->bind('ticket_solve')->method('GET|POST')->before($before);

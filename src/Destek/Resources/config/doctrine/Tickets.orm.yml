@@ -1,0 +1,63 @@
+Destek\Entity\Tickets:
+    type: entity
+    table: tickets
+    repositoryClass: Destek\Entity\Repository\TicketsRepository
+    indexes:
+        recipient_id:
+            columns: [recipient_id]
+        owner_user_id:
+            columns: [owner_user_id]
+        priority_id:
+            columns: [priority_id]
+        deleted:
+            columns: [deleted]
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        recipient_id:
+            type: integer
+            length: 11
+            nullable: true
+        owner_user_id:
+            type: integer
+            length: 11
+            nullable: true
+        priority_id:
+            type: integer
+            length: 11
+            nullable: true
+        subject:
+            type: string
+            length: 255
+            nullable: true
+        message: 
+            type: text
+            nullable: true
+        status_id:
+            type: smallint
+            length: 3
+            nullable: true
+            default: 0
+        ip:
+            type: string
+            length: 50
+            nullable: true
+        created_at:
+            type: datetime
+            length: 20
+            nullable: true
+        updated_at:
+            type: datetime
+            length: 20
+            nullable: true
+        deleted:
+            type: boolean
+            nullable: true
+        deleted_at:
+            type: datetime
+            length: 20
+            column: deleted_at
+            nullable: true

@@ -8,10 +8,10 @@ Destek\Entity\Priority:
             id: true
             generator:
                 strategy: AUTO
-        user_id:
-            type: integer
         name:
-            type: integer
+            type: string
+            nullable: true
+            length: 30
         deleted:
             type: boolean
             options:

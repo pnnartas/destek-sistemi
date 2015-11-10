@@ -12,4 +12,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
+
+    /**
+     * @param $id
+     * @param $name Kategori adı
+     * @return mixed
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function recordCategory($id, $name)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->where('c.id <> :id')
+            ->andWhere('c.name = :name')
+            ->andWhere('c.deleted =:deleted')
+            ->setParameters(array(
+                'id' => $id,
+                'name' => $name,
+                'deleted' => false
+            ));
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
 }

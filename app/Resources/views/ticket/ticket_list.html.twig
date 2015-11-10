@@ -1,0 +1,56 @@
+{% extends "layout/base.html.twig" %}
+{% block title %}Ticket{% endblock %}
+{% set active = 'ticket' %}
+{% block content %}
+    <div class="page-header">
+        <h3>{% if is_granted('ROLE_ADMIN') %}Ticketlar{% else %}Ticketlarım{% endif %}</h3>
+    </div>
+    {% for message in app.session.getFlashBag.get('success') %}
+        <div class="alert alert-success text-center">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+
+    {% for message in app.session.getFlashBag.get('error') %}
+        <div class="alert alert-danger text-center">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+
+    {% if tickets is not empty %}
+
+
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Başlık</th>
+                <th>Kategori</th>
+                <th>Öncelik</th>
+                <th>Eklenme Tarihi</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.subject }}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ ticket.create_at|date('d.m.Y H:i') }}</td>
+                    <td style="font-weight: bold;">{% if ticket.status_id == 2 %} <span style="color: green;">Çözüldü</span> {% else %} Açık {% endif %}</td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ path('ticket_detail',{'id': ticket.id}) }}" role="button">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Detayı</a>
+                        {% if is_granted('ROLE_ADMIN') and ticket.status_id == 1 %}
+                            <a class="btn btn-success btn-sm" href="{{ path('ticket_solve', {'id': ticket.id}) }}" role="button" style="margin-left: 5px;">
+                                <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Çöz</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h5>Ticket bulunamadı.</h5>
+    {% endif %}
+{% endblock %}

@@ -31,6 +31,13 @@ class CategoriesController
         return $application['twig']->render('category/categories_list.html.twig',array('categories' => $categories));
     }
 
+    /**
+     * Kategori Ekleme
+     * @param Request $request
+     * @param Application $application
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+
     public function addAction(Request $request,Application $application)
     {
 
@@ -57,7 +64,7 @@ class CategoriesController
 
                 // Kategori adı varsa;
                 if ($categoryName !== null) {
-                    $form->getElement('email')->setErrors(array('Bu kategori adı sistemde mevcut!'));
+                    $form->getElement('name')->setErrors(array('Bu kategori adı sistemde mevcut!'));
                     return $application['twig']->render('category/categories_add.html.twig', array('form' => $form));
                 }
 
@@ -113,8 +120,24 @@ class CategoriesController
 
         if ($request->getMethod() == 'POST') {
             //Kategori düzenleme işlemi
-
-            echo "Kategori düzenleme";
+            if ($form->isValid($request->request->all())) {
+                $data = $form->getValues();
+                // Kategori adı sistemde varmı
+                $categoryName = $application['orm.em']->getRepository('Destek\Entity\Category')->recordCategory($id, $data['name']);
+                // Kategori adı sistemde varsa;
+                if ($categoryName !== null) {
+                    $form->getElement('name')->setErrors(array('Bu kategori adı sistemde kayıtlı!'));
+                    return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
+                }
+                $category->setName($data['name']);
+                $category->setUpdatedAt(new \DateTime());
+                $application['orm.em']->persist($category);
+                $application['orm.em']->flush();
+                $message = 'Kategorisi başarıyla güncellendi.';
+                $application['session']->getFlashBag()->add('success', $message);
+                $redirect = $application['url_generator']->generate('category');
+                return $application->redirect($redirect);
+            }
         }
 
         return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
@@ -143,7 +166,7 @@ class CategoriesController
             $application['session']->getFlashBag()->add('success', $message);
             $redirect = $application['url_generator']->generate('category');
         } else {
-            $redirect = $application['url_generator']->generate('homepage');
+            $redirect = $application['url_generator']->generate('dashboard');
         }
         return $application->redirect($redirect);
     }

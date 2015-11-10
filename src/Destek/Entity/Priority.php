@@ -16,11 +16,6 @@ class Priority
     /**
      * @var integer
      */
-    private $user_id;
-
-    /**
-     * @var integer
-     */
     private $name;
 
     /**
@@ -55,29 +50,6 @@ class Priority
     }
 
     /**
-     * Set user_id
-     *
-     * @param integer $userId
-     * @return Priority
-     */
-    public function setUserId($userId)
-    {
-        $this->user_id = $userId;
-    
-        return $this;
-    }
-
-    /**
-     * Get user_id
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
-
-    /**
      * Set name
      *
      * @param integer $name
@@ -93,7 +65,7 @@ class Priority
     /**
      * Get name
      *
-     * @return integer 
+     * @return string
      */
     public function getName()
     {
