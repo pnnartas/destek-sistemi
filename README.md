@@ -15,3 +15,15 @@ Destek Sistemi
 - Yetkilendirme kontrolleri
 
 
+
+Kullanıcı Bilgileri
+
+Admin:
+Kullanıcı Adı: admin@admin.com
+Kullanıcı Şifre: admin123
+
+
+User:
+Kullanıcı Adı: user@user.com
+Kullanıcı Şifre: user123
+
