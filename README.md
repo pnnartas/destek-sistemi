@@ -18,12 +18,14 @@ Destek Sistemi
 
 ## Kullanıcı Bilgileri
 
-Admin:
-Kullanıcı Adı: admin@admin.com
-Kullanıcı Şifre: admin123
+- Admin Kullanıcısı:
+
+- Kullanıcı Adı: admin@admin.com
+- Kullanıcı Şifre: admin123
 
 
-User:
-Kullanıcı Adı: user@user.com
-Kullanıcı Şifre: user123
+- Kullanıcı:
+
+- Kullanıcı Adı: user@user.com
+- Kullanıcı Şifre: user123
 
