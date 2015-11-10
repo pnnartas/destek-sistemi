@@ -5,7 +5,7 @@ Destek Sistemi
 - Doctrine ORM nin entegre edilmesi
 - Kullanıcı giriş ve çıkış işlemlerinin yapılması
 - Kategori listeleme, ekleme, güncelleme, silme.
-
+- Yöneticinin destek durumunu çözüldü olarak işaretleyebilmesi
 
 ## Kullanıcı Bilgileri
 
@@ -26,7 +26,6 @@ Destek Sistemi
 - Destek eklemede birden fazla kategori seçilebilmesi
 - Destek eklemede ek dosya kayıt edebilme
 - Destekleri kriterlere göre arayabilme (önem, kategori, başlık metni ve eklenme tarihi)
-- Yöneticinin destek durumunu çözüldü olarak işaretleyebilmesi
 - Yöneticinin desteğe cevap yazabilmesi
 - Yetkilendirme kontrolleri
 
