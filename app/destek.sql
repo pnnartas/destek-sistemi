@@ -26,7 +26,7 @@ INSERT INTO `users` (`id`, `name`, `surname`, `username`, `email`, `salt`, `pass
 CREATE TABLE category (
 id INT AUTO_INCREMENT NOT NULL,
 user_id INT NOT NULL,
-name INT NOT NULL,
+name varchar(50) NOT NULL,
 status TINYINT(1) DEFAULT '0',
 deleted TINYINT(1) DEFAULT '0' NOT NULL,
 deleted_at DATETIME DEFAULT NULL,

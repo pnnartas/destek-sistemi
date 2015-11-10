@@ -106,13 +106,12 @@ $application->register(new SessionServiceProvider(), array(
 // Hata ayıklama modunu aktif eder..
 $application['debug'] = false;
 
-
-
 $application->error(function (\Exception $e, $code) use ($application) {
 
     if ($application['debug']) {
         return;
     }
+    var_dump($e->getMessage());exit;
     switch ($code) {
         case 404:
             $message = 'Aradığınız sayfa bulunamadı.';

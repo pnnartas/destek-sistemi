@@ -1,0 +1,29 @@
+Destek\Entity\TicketCategory:
+    type: entity
+    table: ticket_category
+    repositoryClass: Destek\Entity\Repository\TicketCategoryRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        user_id:
+            type: integer
+        category_id:
+            type: integer
+        ticket_id:
+            type: integer
+        deleted:
+            type: boolean
+            options:
+                default: false               
+        deleted_at:
+            type: datetime   
+            nullable: true
+        created_at:
+            type: datetime   
+        updated_at:
+            type: datetime
+            nullable: true
+    lifecycleCallbacks: 

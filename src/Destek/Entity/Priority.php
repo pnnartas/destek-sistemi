@@ -2,7 +2,6 @@
 
 namespace Destek\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Priority

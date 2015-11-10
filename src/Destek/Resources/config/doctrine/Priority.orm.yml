@@ -1,0 +1,27 @@
+Destek\Entity\Priority:
+    type: entity
+    table: priority
+    repositoryClass: Destek\Entity\Repository\PriorityRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        user_id:
+            type: integer
+        name:
+            type: integer
+        deleted:
+            type: boolean
+            options:
+                default: false               
+        deleted_at:
+            type: datetime   
+            nullable: true
+        created_at:
+            type: datetime   
+        updated_at:
+            type: datetime
+            nullable: true
+    lifecycleCallbacks: 

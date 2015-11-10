@@ -4,6 +4,8 @@ Destek Sistemi
 - ZF1 Form bileşeni entegre edilmesi
 - Doctrine ORM nin entegre edilmesi
 - Kullanıcı giriş ve çıkış işlemlerinin yapılması
+- Kategori listeleme, ekleme, silme.
+
 
 ## Kullanıcı Bilgileri
 
@@ -23,7 +25,7 @@ Destek Sistemi
 ## Yapılacaklar
 - Destek eklemede birden fazla kategori seçilebilmesi
 - Destek eklemede ek dosya kayıt edebilme
-- Destek Kategorisi oluşturma, düzenleme ve listeleme ekranları
+- Destek Kategorisi düzenleme
 - Destekleri kriterlere göre arayabilme (önem, kategori, başlık metni ve eklenme tarihi)
 - Yöneticinin destek durumunu çözüldü olarak işaretleyebilmesi
 - Yöneticinin desteğe cevap yazabilmesi

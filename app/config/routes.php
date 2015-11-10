@@ -1,5 +1,14 @@
 <?php
 
+
+$before = function() use ($application) {
+    if ($application['security']->isGranted('IS_AUTHENTICATED_FULLY') == false) {
+        $redirect = $application['url_generator']->generate('dashboard');
+        return $application->redirect($redirect);
+    }
+};
+
+
 $application->get('/', 'Destek\Controller\DashboardController::dashboardAction')
     ->bind('dashboard');
 
@@ -13,13 +22,15 @@ $application->post('/login_check', function() {})
     ->bind('login_check');
 
 
+//Category
+$application->get('/category', 'Destek\Controller\CategoriesController::indexAction')
+    ->bind('category')->before($before);
 
-$application->get('/categories', 'Destek\Controller\TicketCategoriesController::indexAction')
-    ->bind('categories');
+$application->get('/category/add', 'Destek\Controller\CategoriesController::addAction')
+    ->bind('category_add')->method('GET|POST')->before($before);
 
+$application->get('/category/edit/{id}', 'Destek\Controller\CategoriesController::editAction')
+    ->bind('category_edit')->method('GET|POST')->before($before);
 
-$application->get('/categories/add', 'Destek\Controller\TicketCategoriesController::addAction')
-    ->bind('categories/add');
-
-$application->get('/categories/edit', 'Destek\Controller\TicketCategoriesController::editAction')
-    ->bind('categories/edit');
+$application->delete('/category/delete/{id}', 'Destek\Controller\CategoriesController::deleteAction')
+    ->bind('category_delete')->method('GET|POST')->before($before);

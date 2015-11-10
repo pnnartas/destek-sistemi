@@ -2,6 +2,7 @@
 
 namespace Destek\Entity;
 
+
 /**
  * TicketCategory
  */

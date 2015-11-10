@@ -18,7 +18,7 @@ class Category
     private $user_id;
 
     /**
-     * @var integer
+     * @var string
      */
     private $name;
 
@@ -51,7 +51,7 @@ class Category
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -67,14 +67,14 @@ class Category
     public function setUserId($userId)
     {
         $this->user_id = $userId;
-    
+
         return $this;
     }
 
     /**
      * Get user_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -90,14 +90,14 @@ class Category
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return integer 
+     * @return integer
      */
     public function getName()
     {
@@ -113,14 +113,14 @@ class Category
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getStatus()
     {
@@ -136,14 +136,14 @@ class Category
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
-    
+
         return $this;
     }
 
     /**
      * Get deleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDeleted()
     {
@@ -159,14 +159,14 @@ class Category
     public function setDeletedAt($deletedAt)
     {
         $this->deleted_at = $deletedAt;
-    
+
         return $this;
     }
 
     /**
      * Get deleted_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDeletedAt()
     {
@@ -182,14 +182,14 @@ class Category
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -205,14 +205,14 @@ class Category
     public function setUpdatedAt($updatedAt)
     {
         $this->updated_at = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updated_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

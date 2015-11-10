@@ -33,11 +33,11 @@
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <li class="active"><a href="/">Anasayfa</a></li>
                         {% endif %}
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
                         <li><a href="#about">Destekler</a></li>
                         {% endif %}
-                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <li><a href="{{ path('categories') }}">Destek Kategorileri</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('category') }}">Destek Kategorileri</a></li>
                         {% endif %}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

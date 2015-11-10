@@ -1,0 +1,34 @@
+Destek\Entity\Category:
+    type: entity
+    table: category
+    repositoryClass: Destek\Entity\Repository\CategoryRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        user_id:
+            type: integer
+        name:
+            type: string
+            length: 50
+            nullable: false
+        status:
+            type: boolean
+            nullable: true
+            options:
+                default: true               
+        deleted:
+            type: boolean
+            options:
+                default: false               
+        deleted_at:
+            type: datetime   
+            nullable: true
+        created_at:
+            type: datetime   
+        updated_at:
+            type: datetime
+            nullable: true
+    lifecycleCallbacks: 
