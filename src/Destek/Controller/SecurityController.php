@@ -7,6 +7,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Destek\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Security;
 
 
 class SecurityController
@@ -20,8 +21,20 @@ class SecurityController
         $form->setAction($application['url_generator']->generate('login_check'));
         $form->setView($view);
 
+        $error = null;
+
+        if (!$request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+
+            $error = $application['session']->get(Security::AUTHENTICATION_ERROR);
+            $application['session']->remove(Security::AUTHENTICATION_ERROR);
+        }
+        if ($error !== null) {
+            $error = 'Eposta ya da şifre hatalı!';
+        }
+
         return $application['twig']->render('security/login.html.twig', array(
-            'form' => $form
+            'form' => $form,
+            'error' => $error
         ));
     }
 

@@ -1,8 +1,16 @@
 {% extends "layout/loginbase.html.twig" %}
+
+
 {% block title %}Giriş{% endblock %}
 {% block content %}
-    {% if error is defined %}
-        {{ error }}
+    <div style="margin-top:30px;"></div>
+    {% if error is defined and error is not null %}
+        <div class="alert alert-danger text-center">{{ error }}</div>
     {% endif %}
+    {% for message in app.session.getFlashBag.get('message') %}
+        <div class="alert alert-danger text-center">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
     {{ form|raw }}
 {% endblock %}

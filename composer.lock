@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "55044555d30eaf220a144132ac0302c2",
+    "hash": "d9085b42f79a2c2be74fc7be1252db41",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -1884,6 +1884,49 @@
                 "zend"
             ],
             "time": "2015-04-30 11:14:26"
+        },
+        {
+            "name": "zf1/zend-session",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-session.git",
+                "reference": "b3c743c478f382880b9eab0feccb56f5037c3be3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-session/zipball/b3c743c478f382880b9eab0feccb56f5037c3be3",
+                "reference": "b3c743c478f382880b9eab0feccb56f5037c3be3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11",
+                "zf1/zend-exception": "self.version"
+            },
+            "suggest": {
+                "zf1/zend-config": "Used in special situations or with special adapters",
+                "zf1/zend-db": "Used in special situations or with special adapters",
+                "zf1/zend-loader": "Used in special situations or with special adapters"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_Session": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 Session package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "framework",
+                "session",
+                "zend"
+            ],
+            "time": "2015-04-30 11:10:56"
         },
         {
             "name": "zf1/zend-uri",

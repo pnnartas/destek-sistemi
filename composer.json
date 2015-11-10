@@ -6,6 +6,7 @@
         "zf1/zend-form": "^1.12",
         "easybib/form-decorator": "^0.4.1",
         "zf1/zend-view": "^1.12",
+        "zf1/zend-session": "^1.12",
         "symfony/twig-bridge": "^2.7",
         "doctrine/orm": "^2.5",
         "dflydev/doctrine-orm-service-provider": "1.0.6",
