@@ -9,9 +9,16 @@ use Destek\Provider\UserServiceProvider;
 use \Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
+$defaultEncoder = new MessageDigestPasswordEncoder('sha512', true, 5000);
+
+$encoders = array(
+    'Symfony\\Component\\Security\\Core\\User\\User' => $defaultEncoder
+);
+
+$encoderFactory = new EncoderFactory($encoders);
 
 // Doctrine servisi sağlayıcısını applicationa kayıt eder
 $application->register(new DoctrineServiceProvider(), array(
@@ -50,22 +57,14 @@ $application->register(new DoctrineOrmServiceProvider(), array(
     ),
 ));
 
-
-
-
-
-
-
 $application['user.manager'] = $application->share(function($application) {
     $userManager = new Destek\Provider\UserProvider($application['db']);
     return $userManager;
 });
 
-
 $application['security.authentication_providers'] = array('main' =>
-    new Destek\Provider\AuthProvider($application['user.manager'])
+    new Destek\Provider\AuthProvider($application['user.manager'], $encoderFactory)
 );
-
 
 // Security Service Provider Register
 $application->register(new UserServiceProvider(), array(
