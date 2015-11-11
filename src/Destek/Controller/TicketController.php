@@ -10,7 +10,7 @@ use Destek\Entity\Category;
 use Destek\Entity\TicketCategory;
 use Destek\Form\TicketReplyForm;
 use Destek\Entity\TicketReplies;
-use Zend_File_Transfer;
+use Zend_Validate_File_Upload;
 
 
 
@@ -163,11 +163,22 @@ class TicketController
                 if ($form->isValid($request->request->all())) {
                     $data = $form->getValues();
 
+                    $file = $request->files->get('file');
+
+
+                    if ($file !== null) {
+
+                        $filename = $file->getClientOriginalName();
+
+                         $file->move(__DIR__.'/../../../web/upload', $file->getClientOriginalName());
+                    }
+
                     $ticket = new Tickets();
 
                     $ticket->setSubject($data['subject']);
                     $ticket->setMessage($data['message']);
-
+                    $ticket->setTicketFile($filename);
+                    //$ticket->setTicketFile()
                     // Yeni Destek
                     $ticket->setStatusId(1);
                     // Yetkili Yönetici

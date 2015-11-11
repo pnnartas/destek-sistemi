@@ -39,6 +39,8 @@ CREATE TABLE ticket_category (id INT AUTO_INCREMENT NOT NULL, category_id INT NO
 CREATE TABLE ticket_status (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(30) NOT NULL, deleted TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB
 
 CREATE TABLE tickets (id INT AUTO_INCREMENT NOT NULL, recipient_id INT DEFAULT NULL, owner_user_id INT DEFAULT NULL, priority_id INT DEFAULT NULL, subject VARCHAR(255) DEFAULT NULL, message LONGTEXT DEFAULT NULL, status_id SMALLINT DEFAULT NULL, ip VARCHAR(50) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, deleted TINYINT(1) DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, INDEX track_id (track_id), INDEX recipient_id (recipient_id), INDEX owner_user_id (owner_user_id), INDEX priority_id (priority_id), INDEX deleted (deleted), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+ALTER TABLE  `tickets` ADD  `ticket_file` VARCHAR( 100 ) DEFAULT NULL AFTER  `status_id` ;
+
 CREATE TABLE ticket_replies (id INT AUTO_INCREMENT NOT NULL, ticket_id INT NOT NULL, reply_user_id INT NOT NULL, message LONGTEXT DEFAULT NULL, ip VARCHAR(50) DEFAULT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, deleted TINYINT(1) DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, INDEX ticket_id (ticket_id), INDEX reply_user_id (reply_user_id), INDEX deleted (deleted), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 
 

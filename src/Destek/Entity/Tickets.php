@@ -53,6 +53,11 @@ class Tickets
     private $status_id;
 
     /**
+     * @var string
+     */
+    private $ticket_file;
+
+    /**
      * @var integer
      */
     private $replied;
@@ -223,6 +228,30 @@ class Tickets
     public function getStatusId()
     {
         return $this->status_id;
+    }
+
+    /**
+     * Set ticketFile
+     *
+     * @param string $ticketFile
+     *
+     * @return Tickets
+     */
+    public function setTicketFile($ticketFile)
+    {
+        $this->ticket_file = $ticketFile;
+
+        return $this;
+    }
+
+    /**
+     * Get ticketFile
+     *
+     * @return string
+     */
+    public function getTicketFile()
+    {
+        return $this->ticket_file;
     }
 
     /**

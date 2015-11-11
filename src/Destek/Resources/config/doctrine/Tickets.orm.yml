@@ -41,6 +41,10 @@ Destek\Entity\Tickets:
             length: 3
             nullable: true
             default: 0
+        ticket_file:
+            type: string
+            nullable: true
+            length: 100
         ip:
             type: string
             length: 50
