@@ -13,19 +13,9 @@ class Category
     private $id;
 
     /**
-     * @var integer
-     */
-    private $user_id;
-
-    /**
      * @var string
      */
     private $name;
-
-    /**
-     * @var boolean
-     */
-    private $status;
 
     /**
      * @var boolean

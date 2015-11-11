@@ -21,8 +21,9 @@ class TicketsRepository extends EntityRepository
     public function getTicketList($ownerUserId = null, $recepientId = null, $id = null)
     {
         $qb = $this->createQueryBuilder('t')
-            ->select('t');
-
+            ->select('t.id,t.subject,p.name as priority_name,t.created_at,ts.name as status_name,t.status_id')
+            ->leftJoin('Destek\Entity\TicketStatus','ts','WITH','ts.id = t.status_id and ts.deleted = 0' )
+            ->leftJoin('Destek\Entity\Priority','p','WITH','p.id = t.priority_id and p.deleted = 0' );
 
         if ($recepientId !== null) {
 
@@ -57,5 +58,28 @@ class TicketsRepository extends EntityRepository
         } else {
             return $qb->getQuery()->getArrayResult();
         }
+    }
+
+    /**
+     * Ticket'a ait olan kategorileri listeler
+     * @param $ticketId
+     * @return array
+     */
+
+    public function getTicketCategories($ticketId)
+    {
+
+        $qb = $this->createQueryBuilder('t')
+            ->select('c.id, c.name as category_name')
+            ->leftJoin('Destek\Entity\TicketCategory','tc','WITH','tc.ticket_id = t.id AND tc.deleted = 0 ')
+            ->leftJoin('Destek\Entity\Category','c','WITH','c.id = tc.category_id AND c.deleted = 0')
+            ->where('t.deleted = 0')
+            ->andWhere('t.id = :ticketId')
+            ->setParameters(array(
+                'ticketId' => $ticketId
+            ));
+
+        return $qb->getQuery()->getArrayResult();
+
     }
 }

@@ -16,11 +16,6 @@ class TicketCategory
     /**
      * @var integer
      */
-    private $user_id;
-
-    /**
-     * @var integer
-     */
     private $category_id;
 
     /**

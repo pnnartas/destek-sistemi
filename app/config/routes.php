@@ -40,9 +40,11 @@ $application->delete('/category/delete/{id}', 'Destek\Controller\CategoriesContr
 $application->get('/ticket', 'Destek\Controller\TicketController::indexAction')
     ->bind('ticket')->before($before);
 
-$application->get('/ticket/detail/{id}', 'Destek\Controller\TicketController::detailAction')
-    ->bind('ticket_detail')->method('GET|POST')->before($before);
-
-
 $application->get('/ticket/solve/{id}', 'Destek\Controller\TicketController::solveAction')
     ->bind('ticket_solve')->method('GET|POST')->before($before);
+
+$application->get('/ticket/add', 'Destek\Controller\TicketController::addAction')
+    ->bind('ticket_add')->method('GET|POST')->before($before);
+
+$application->get('/ticket/show/{id}', 'Destek\Controller\TicketController::showAction')
+    ->bind('ticket_show')->method('GET|POST')->before($before);

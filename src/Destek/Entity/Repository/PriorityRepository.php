@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class PriorityRepository extends EntityRepository
 {
+
+    public function getPriority()
+    {
+        $qb = $this->createQueryBuilder('p')
+                   ->select('p.id', 'p.name')
+                   ->where('p.deleted = false');
+
+        $priorityLists = $qb->getQuery()->getArrayResult();
+        $record = array();
+
+        foreach ($priorityLists as $priorityList) {
+            $record[$priorityList['id']] = $priorityList['name'];
+        }
+
+        return $record;
+    }
 }

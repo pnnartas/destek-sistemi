@@ -1,9 +1,13 @@
 {% extends "layout/base.html.twig" %}
-{% block title %}Ticket{% endblock %}
+{% block title %}Ticketlar{% endblock %}
 {% set active = 'ticket' %}
 {% block content %}
     <div class="page-header">
-        <h3>{% if is_granted('ROLE_ADMIN') %}Ticketlar{% else %}Ticketlarım{% endif %}</h3>
+        <h3>{% if is_granted('ROLE_ADMIN') %}Ticketlar{% else %}Ticketlarım{% endif %}
+            {% if is_granted('ROLE_USER') %}
+                <a href="{{ path('ticket_add') }}" class="btn btn-primary btn-sm pull-right">Ticket Ekle</a>
+            {% endif %}
+        </h3>
     </div>
     {% for message in app.session.getFlashBag.get('success') %}
         <div class="alert alert-success text-center">
@@ -35,12 +39,21 @@
                 <tr>
                     <td>{{ ticket.id }}</td>
                     <td>{{ ticket.subject }}</td>
-                    <td></td>
-                    <td></td>
-                    <td>{{ ticket.create_at|date('d.m.Y H:i') }}</td>
-                    <td style="font-weight: bold;">{% if ticket.status_id == 2 %} <span style="color: green;">Çözüldü</span> {% else %} Açık {% endif %}</td>
                     <td>
-                        <a class="btn btn-info btn-sm" href="{{ path('ticket_detail',{'id': ticket.id}) }}" role="button">
+                        {% if ticket.categories is defined %}
+                            <ul class="list-group">
+                            {% for category in ticket.categories %}
+                                <li>{{ category.category_name }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>{{ ticket.priority_name}}</td>
+                    <td>{{ ticket.create_at|date('d.m.Y H:i') }}</td>
+                    <td style="font-weight: bold;">
+                            <span style="color: green;">{{ ticket.status_name }}</span>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ path('ticket_show',{'id': ticket.id}) }}" role="button">
                             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Detayı</a>
                         {% if is_granted('ROLE_ADMIN') and ticket.status_id == 1 %}
                             <a class="btn btn-success btn-sm" href="{{ path('ticket_solve', {'id': ticket.id}) }}" role="button" style="margin-left: 5px;">

@@ -8,17 +8,10 @@ Destek\Entity\Category:
             id: true
             generator:
                 strategy: AUTO
-        user_id:
-            type: integer
         name:
             type: string
             length: 50
             nullable: false
-        status:
-            type: boolean
-            nullable: true
-            options:
-                default: true               
         deleted:
             type: boolean
             options:

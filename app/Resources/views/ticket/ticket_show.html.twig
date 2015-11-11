@@ -1,0 +1,32 @@
+{% extends "layout/base.html.twig" %}
+{% block title %}Ticket Önizleme{% endblock %}
+{% set active = 'ticket' %}
+{% block content %}
+    {% for message in app.session.getFlashBag.get('success') %}
+        <div class="alert alert-success text-center">
+            <strong>{{ message }}</strong>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h1>Konu: {{ ticket.subject }}</h1>
+                <p>Mesaj: {{ ticket.message }}</p>
+            </div>
+        </div>
+    </div>
+    {% for reply in ticketReplies %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    Mesaj
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form|raw }}
+        </div>
+    </div>
+{% endblock %}

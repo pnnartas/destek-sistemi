@@ -1,0 +1,18 @@
+Destek\Entity\TicketStatus:
+    type: entity
+    table: ticket_status
+    repositoryClass: Destek\Entity\Repository\TicketStatusRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            length: 30
+        deleted:
+            type: boolean
+        created_at:
+            type: datetime   
+    lifecycleCallbacks: 

@@ -6,6 +6,8 @@ Destek Sistemi
 - Kullanıcı giriş ve çıkış işlemlerinin yapılması
 - Kategori listeleme, ekleme, güncelleme, silme.
 - Yöneticinin destek durumunu çözüldü olarak işaretleyebilmesi
+- Yetkilendirme kontrolleri
+- Destek eklemede birden fazla kategori seçilebilmesi
 
 ## Kullanıcı Bilgileri
 
@@ -23,9 +25,8 @@ Destek Sistemi
 
 
 ## Yapılacaklar
-- Destek eklemede birden fazla kategori seçilebilmesi
 - Destek eklemede ek dosya kayıt edebilme
 - Destekleri kriterlere göre arayabilme (önem, kategori, başlık metni ve eklenme tarihi)
 - Yöneticinin desteğe cevap yazabilmesi
-- Yetkilendirme kontrolleri
+
 

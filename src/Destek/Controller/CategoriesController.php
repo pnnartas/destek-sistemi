@@ -15,9 +15,6 @@ class CategoriesController
      */
     public function indexAction(Application $application)
     {
-
-        $userId = $application['session']->get('userId');
-
         // Kategorileri sadece yönetici görebilir.
         if ($application['security']->isGranted('ROLE_ADMIN')) {
 
@@ -26,6 +23,9 @@ class CategoriesController
             ), array(
                 'id' => 'DESC'
             ));
+        }else {
+
+            return $application->redirect($application['url_generator']->generate('dashboard'));
         }
 
         return $application['twig']->render('category/categories_list.html.twig',array('categories' => $categories));
@@ -40,54 +40,59 @@ class CategoriesController
 
     public function addAction(Request $request,Application $application)
     {
+        // Kategorileri sadece yönetici görebilir.
+        if ($application['security']->isGranted('ROLE_USER')) {
 
-        $userId = $application['session']->get('userId');
-        $view   = new \Zend_View();
-        $form   = new CategoryForm();
+            return $application->redirect($application['url_generator']->generate('dashboard'));
+        } else {
 
-        $form->setAttrib('class', 'form-horizontal');
+            $userId = $application['session']->get('userId');
+            $view   = new \Zend_View();
+            $form   = new CategoryForm();
+
+            $form->setAttrib('class', 'form-horizontal');
 
 
-        $form->setAction($application['url_generator']->generate('category_add'));
-        $form->setView($view);
+            $form->setAction($application['url_generator']->generate('category_add'));
+            $form->setView($view);
 
 
-        if ($request->getMethod() == 'POST') {
-            if ($form->isValid($request->request->all())) {
-                $data = $form->getValues();
+            if ($request->getMethod() == 'POST') {
+                if ($form->isValid($request->request->all())) {
+                    $data = $form->getValues();
 
-                // Kategori adı var mı?
-                $categoryName = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
-                    'deleted' => 0,
-                    'name' => $data['name']
-                ));
+                    // Kategori adı var mı?
+                    $categoryName = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
+                        'deleted' => 0,
+                        'name' => $data['name']
+                    ));
 
-                // Kategori adı varsa;
-                if ($categoryName !== null) {
-                    $form->getElement('name')->setErrors(array('Bu kategori adı sistemde mevcut!'));
-                    return $application['twig']->render('category/categories_add.html.twig', array('form' => $form));
+                    // Kategori adı varsa;
+                    if ($categoryName !== null) {
+                        $form->getElement('name')->setErrors(array('Bu kategori adı sistemde mevcut!'));
+                        return $application['twig']->render('category/categories_add.html.twig', array('form' => $form));
+                    }
+
+                    //Kategori adı sistemde mevcut değil ise ekleme yapılır.
+                    $category = new Category();
+                    $category->setName($data['name']);
+                    $category->setDeleted(false);
+                    $category->setCreatedAt(new \DateTime());
+                    $application['orm.em']->persist($category);
+                    $application['orm.em']->flush();
+
+                    $message = 'Yeni Kategori Oluşturuldu.';
+                    $application['session']->getFlashBag()->add('success', $message);
+
+                    $redirect = $application['url_generator']->generate('category');
+
+                    return $application->redirect($redirect);
                 }
-
-                //Kategori adı sistemde mevcut değil ise ekleme yapılır.
-                $category = new Category();
-                $category->setName($data['name']);
-                $category->setUserId($userId);
-                $category->setDeleted(false);
-                $category->setCreatedAt(new \DateTime());
-                $application['orm.em']->persist($category);
-                $application['orm.em']->flush();
-
-                $message = 'Yeni Kategori Oluşturuldu.';
-                $application['session']->getFlashBag()->add('success', $message);
-
-                $redirect = $application['url_generator']->generate('category');
-
-                return $application->redirect($redirect);
             }
+            return $application['twig']->render('category/categories_add.html.twig', array('form' => $form));
         }
 
 
-        return $application['twig']->render('category/categories_add.html.twig', array('form' => $form));
     }
 
     /**
@@ -98,49 +103,54 @@ class CategoriesController
      */
     public function editAction($id,Request $request,Application $application)
     {
+        if ($application['security']->isGranted('ROLE_USER')) {
 
-        $category = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
-            'deleted' => 0,
-            'id' => $id,
-        ));
-
-        if ($category === null) {
             return $application->redirect($application['url_generator']->generate('dashboard'));
-        }
-        //$userId = $application['session']->get('userId');
-        $view   = new \Zend_View();
-        $form   = new CategoryForm();
+        } else {
 
+            $category = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
+                'deleted' => 0,
+                'id' => $id,
+            ));
 
-        $form->setAttrib('class', 'form-horizontal');
-        $form->getElement('name')->setValue($category->getName());
-
-        $form->setAction($application['url_generator']->generate('category_edit', array('id' => $id)));
-        $form->setView($view);
-
-        if ($request->getMethod() == 'POST') {
-            //Kategori düzenleme işlemi
-            if ($form->isValid($request->request->all())) {
-                $data = $form->getValues();
-                // Kategori adı sistemde varmı
-                $categoryName = $application['orm.em']->getRepository('Destek\Entity\Category')->recordCategory($id, $data['name']);
-                // Kategori adı sistemde varsa;
-                if ($categoryName !== null) {
-                    $form->getElement('name')->setErrors(array('Bu kategori adı sistemde kayıtlı!'));
-                    return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
-                }
-                $category->setName($data['name']);
-                $category->setUpdatedAt(new \DateTime());
-                $application['orm.em']->persist($category);
-                $application['orm.em']->flush();
-                $message = 'Kategorisi başarıyla güncellendi.';
-                $application['session']->getFlashBag()->add('success', $message);
-                $redirect = $application['url_generator']->generate('category');
-                return $application->redirect($redirect);
+            if ($category === null) {
+                return $application->redirect($application['url_generator']->generate('dashboard'));
             }
+            //$userId = $application['session']->get('userId');
+            $view = new \Zend_View();
+            $form = new CategoryForm();
+
+
+            $form->setAttrib('class', 'form-horizontal');
+            $form->getElement('name')->setValue($category->getName());
+
+            $form->setAction($application['url_generator']->generate('category_edit', array('id' => $id)));
+            $form->setView($view);
+
+            if ($request->getMethod() == 'POST') {
+                //Kategori düzenleme işlemi
+                if ($form->isValid($request->request->all())) {
+                    $data = $form->getValues();
+                    // Kategori adı sistemde varmı
+                    $categoryName = $application['orm.em']->getRepository('Destek\Entity\Category')->recordCategory($id, $data['name']);
+                    // Kategori adı sistemde varsa;
+                    if ($categoryName !== null) {
+                        $form->getElement('name')->setErrors(array('Bu kategori adı sistemde kayıtlı!'));
+                        return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
+                    }
+                    $category->setName($data['name']);
+                    $category->setUpdatedAt(new \DateTime());
+                    $application['orm.em']->persist($category);
+                    $application['orm.em']->flush();
+                    $message = 'Kategorisi başarıyla güncellendi.';
+                    $application['session']->getFlashBag()->add('success', $message);
+                    $redirect = $application['url_generator']->generate('category');
+                    return $application->redirect($redirect);
+                }
+            }
+            return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
         }
 
-        return $application['twig']->render('category/categories_edit.html.twig', array('form' => $form));
     }
 
     /**
@@ -151,24 +161,31 @@ class CategoriesController
      */
     public function deleteAction($id,Request $request,Application $application)
     {
+        if ($application['security']->isGranted('ROLE_USER')) {
 
-        $category = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
-            'deleted' => 0,
-            'id' => $id
-        ));
-
-        if ($category !== null) {
-            $category->setDeleted(true);
-            $category->setDeletedAt(new \DateTime());
-            $application['orm.em']->persist($category);
-            $application['orm.em']->flush();
-            $message = 'Kategori başarıyla silindi.';
-            $application['session']->getFlashBag()->add('success', $message);
-            $redirect = $application['url_generator']->generate('category');
+            return $application->redirect($application['url_generator']->generate('dashboard'));
         } else {
-            $redirect = $application['url_generator']->generate('dashboard');
+
+            $category = $application['orm.em']->getRepository('Destek\Entity\Category')->findOneBy(array(
+                'deleted' => 0,
+                'id' => $id
+            ));
+
+            if ($category !== null) {
+
+                $category->setDeleted(true);
+                $category->setDeletedAt(new \DateTime());
+                $application['orm.em']->persist($category);
+                $application['orm.em']->flush();
+                $message = 'Kategori başarıyla silindi.';
+                $application['session']->getFlashBag()->add('success', $message);
+                $redirect = $application['url_generator']->generate('category');
+            } else {
+
+                $redirect = $application['url_generator']->generate('dashboard');
+            }
+            return $application->redirect($redirect);
         }
-        return $application->redirect($redirect);
     }
 
 

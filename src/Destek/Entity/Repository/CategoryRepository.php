@@ -33,4 +33,23 @@ class CategoryRepository extends EntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return array
+     */
+    public function getCategory()
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.id', 'c.name')
+            ->where('c.deleted = false');
+
+        $categoryLists = $qb->getQuery()->getArrayResult();
+        $record = array();
+
+        foreach ($categoryLists as $categoryList) {
+            $record[$categoryList['id']] = $categoryList['name'];
+        }
+
+        return $record;
+    }
+
 }
