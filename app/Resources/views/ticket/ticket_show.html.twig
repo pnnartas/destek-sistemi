@@ -7,20 +7,69 @@
             <strong>{{ message }}</strong>
         </div>
     {% endfor %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="jumbotron">
-                <h1>Konu: {{ ticket.subject }}</h1>
-                <p>Mesaj: {{ ticket.message }}</p>
-            </div>
-        </div>
-    </div>
+    <h3>Ticket Detayı</h3>
+    <table class="table">
+        <tr>
+            <td width="135px"><strong>Başlık </strong></td><td width="5px">:</td><td>{{ ticket.subject }}</td>
+        </tr>
+        <tr>
+            <td><strong>Açıklama </strong></td><td>:</td><td>{{ ticket.message }}</td>
+        </tr>
+        <tr>
+            <td><strong>Ticketı Açan Kişi </strong></td>
+            <td>:</td>
+            <td>{{ user.name }} {{ user.surname }}</td>
+        </tr>
+        <tr>
+            <td><strong>Kategori </strong></td><td>:</td><td>
+                {% for category in ticketCategories %}
+                    <li>{{ category.category_name }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Önceliği </strong></td><td>:</td><td>{{ ticket.priority_name }}</td>
+        </tr>
+        <tr>
+            <td><strong>Eklenme Tarihi </strong></td><td>:</td><td>{{ ticket.create_date|date("d.m.Y H:i:s") }}</td>
+        </tr>
+        <tr>
+            <td><strong>Durumu </strong></td><td>:</td><td>{% if ticket.status_id == 2 %} Çözüldü {% else %} Açık {% endif %}</td>
+        </tr>
+
+        {% if ticket_file is not empty %}
+            <tr>
+                <td><strong>Dosya </strong></td><td>:</td><td>Ticket dosyasını indirmek için <a href="{{ app.request.basepath }}/user/ticket/file/{{ ticket_file }}">tıklayın</a></td>
+            </tr>
+        {% elseif ticket_image is not empty %}
+            <tr>
+                <td><strong>Dosya </strong></td><td>:</td><td>
+                    <img src="{{ ticket_image }}" style="width: 250px;"/></td>
+            </tr>
+        {% endif %}
+    </table>
     {% for reply in ticketReplies %}
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-info">
-                    Mesaj
-                </div>
+                {% if  reply.reply_user_id == app.session.get('userId') %}
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ reply.name }} {{ reply.surname }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ reply.message }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ reply.name }} {{ reply.surname }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {{ reply.message }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

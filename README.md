@@ -8,6 +8,9 @@ Destek Sistemi
 - Yöneticinin destek durumunu çözüldü olarak işaretleyebilmesi
 - Yetkilendirme kontrolleri
 - Destek eklemede birden fazla kategori seçilebilmesi
+- Yöneticinin desteğe cevap yazabilmesi
+- Destekleri kriterlere göre arayabilme (önem, kategori, başlık metni ve eklenme tarihi)
+
 
 ## Kullanıcı Bilgileri
 
@@ -26,7 +29,5 @@ Destek Sistemi
 
 ## Yapılacaklar
 - Destek eklemede ek dosya kayıt edebilme
-- Destekleri kriterlere göre arayabilme (önem, kategori, başlık metni ve eklenme tarihi)
-- Yöneticinin desteğe cevap yazabilmesi
 
 

@@ -11,4 +11,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class TicketRepliesRepository extends EntityRepository
 {
+    /**
+     * @param $ticketId
+     * @return array
+     */
+    public function getTicketReplies($ticketId)
+    {
+        $qb = $this->createQueryBuilder('tr')
+            ->select('tr.message, tr.reply_user_id, u.name, u.surname')
+            ->leftJoin('Destek\Entity\User','u','WITH','u.id = tr.reply_user_id')
+            ->where('tr.ticket_id =:ticketId')
+            ->setParameter('ticketId',$ticketId)
+            ->orderBy('tr.id','ASC');
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }

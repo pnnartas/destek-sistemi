@@ -18,12 +18,13 @@ class TicketsRepository extends EntityRepository
      * @param null $id
      * @return array|mixed
      */
-    public function getTicketList($ownerUserId = null, $recepientId = null, $id = null)
+    public function getTicketList($filter = null, $ownerUserId = null, $recepientId = null, $id = null)
     {
         $qb = $this->createQueryBuilder('t')
-            ->select('t.id,t.subject,p.name as priority_name,t.created_at,ts.name as status_name,t.status_id')
+            ->select('t.id, t.subject, t.message, t.owner_user_id, p.name as priority_name,t.created_at, ts.name as status_name, t.status_id')
             ->leftJoin('Destek\Entity\TicketStatus','ts','WITH','ts.id = t.status_id and ts.deleted = 0' )
-            ->leftJoin('Destek\Entity\Priority','p','WITH','p.id = t.priority_id and p.deleted = 0' );
+            ->leftJoin('Destek\Entity\Priority','p','WITH','p.id = t.priority_id and p.deleted = 0' )
+            ->orderBy('t.id','DESC');
 
         if ($recepientId !== null) {
 
@@ -50,6 +51,32 @@ class TicketsRepository extends EntityRepository
                 $qb->where('t.owner_user_id = :ownerUserId AND t.deleted = 0')->setParameters(array(
                     'ownerUserId' => $ownerUserId
                 ));
+            }
+        }
+
+
+        if($filter !== null){
+            if(true == isset($filter['subject'])){
+                $qb->andWhere('t.subject LIKE :subject')
+                    ->setParameter('subject','%'.$filter['subject'].'%');
+            }
+            if(true == isset($filter['category'])){
+                $qb->leftJoin('Destek\Entity\TicketCategory','tc','WITH','tc.ticket_id = t.id AND tc.deleted = 0 ')
+                    ->andWhere('tc.category_id =:categoryId')
+                    ->setParameter('categoryId',$filter['category']);
+            }
+            if(true == isset($filter['priority'])){
+                $qb->andWhere('t.priority_id =:priorityId')
+                    ->setParameter('priorityId',$filter['priority']);
+            }
+            if(true == isset($filter['date'])){
+
+                $createdAt = new \DateTime($filter['date']);
+                $startAt  = $createdAt->format('Y-m-d').' 00.00.00';
+                $finishAt = $createdAt->format('Y-m-d').' 23.59.59';
+
+                $qb->andWhere("t.created_at >= '$startAt' and t.created_at <= '$finishAt' ");
+
             }
         }
 

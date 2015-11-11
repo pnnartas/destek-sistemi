@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d9085b42f79a2c2be74fc7be1252db41",
+    "hash": "bf3b110947a078dfb937c65fd14947ff",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -1670,6 +1670,48 @@
                 "zend"
             ],
             "time": "2015-04-30 11:10:20"
+        },
+        {
+            "name": "zf1/zend-file-transfer",
+            "version": "1.12.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zf1/zend-file-transfer.git",
+                "reference": "9de6760993665eef579349e312a7f169842312d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf1/zend-file-transfer/zipball/9de6760993665eef579349e312a7f169842312d0",
+                "reference": "9de6760993665eef579349e312a7f169842312d0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11",
+                "zf1/zend-exception": "self.version"
+            },
+            "suggest": {
+                "zf1/zend-loader": "Used in special situations or with special adapters"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_File_Transfer": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 File Transfer package",
+            "homepage": "http://framework.zend.com/",
+            "keywords": [
+                "ZF1",
+                "file",
+                "framework",
+                "transfer",
+                "zend"
+            ],
+            "time": "2015-04-30 11:09:13"
         },
         {
             "name": "zf1/zend-filter",

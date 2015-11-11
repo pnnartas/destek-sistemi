@@ -12,6 +12,7 @@ class TicketForm extends \EasyBib_Form
         $message        = new \Zend_Form_Element_Textarea('message');
         $priorityId     = new \Zend_Form_Element_Select('priorityId');
         $categories     = new \Zend_Form_Element_Select('categories', array('multiple' => true));
+        $file           = new \Zend_Form_Element_File('file');
         $submit         = new \Zend_Form_Element_Button('submit');
         $cancel         = new \Zend_Form_Element_Button('cancel');
 
@@ -45,6 +46,14 @@ class TicketForm extends \EasyBib_Form
             ->setValidators(array('StringLength'))
             ->setErrorMessages(array('StringLength' => 'En az bir adet seçmelisiniz!', 'reuqired' => 'Bu alan zorunludur'));
 
+        $file->setLabel('File')
+            ->setAttrib('enctype', 'multipart/form-data')
+            ->setAttrib('accept', 'image/*')
+            ->setDestination('/var/www/html')
+            ->addValidator('Count', false, 1)
+            ->addValidator('Size', false, 102400)
+            ->addValidator('Extension', false, 'jpg,png,gif');
+
         $submit->setLabel('Kaydet')
             ->setAttrib('class', 'btn btn-lg btn-primary btn-block')
             ->setAttrib('type', 'submit');
@@ -57,7 +66,7 @@ class TicketForm extends \EasyBib_Form
 
         // add elements
         $this->addElements(array(
-           $subject, $message, $priorityId, $categories, $submit, $cancel
+           $subject, $message, $priorityId, $categories, $file, $submit, $cancel
         ));
 
         // add display group

@@ -8,22 +8,30 @@ use Destek\Form\TicketForm;
 use Destek\Entity\Tickets;
 use Destek\Entity\Category;
 use Destek\Entity\TicketCategory;
+use Destek\Form\TicketReplyForm;
+use Destek\Entity\TicketReplies;
+use Zend_File_Transfer;
 
 
 
 class TicketController
 {
-    public function indexAction(Application $application)
+    public function indexAction(Request $request,Application $application)
     {
-        $userId = $application['session']->get('userId');
+        $userId   = $application['session']->get('userId');
+
+        $filter = $this->_setFilter($request);
+
+        $category = $application['orm.em']->getRepository('Destek\Entity\Category')->findBy(array('deleted'=>false));
+        $priority = $application['orm.em']->getRepository('Destek\Entity\Priority')->findBy(array('deleted'=>false));
 
         // Yöneticinin ticketlerı
         if ($application['security']->isGranted('ROLE_ADMIN')) {
 
-            $tickets = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList(null, $userId);
+            $tickets = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList($filter,null, $userId);
         } else if ($application['security']->isGranted('ROLE_USER')) {
             // Kullanıcının ticketları
-            $tickets = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList($userId);
+            $tickets = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList($filter,$userId);
         }
         // Ticket'a ait olan kategorileri listeler
         foreach($tickets as &$ticket)
@@ -32,7 +40,11 @@ class TicketController
             $ticket['categories'] =$ticketCategories;
         }
 
-        return $application['twig']->render('ticket/ticket_list.html.twig',array('tickets' => $tickets));
+        return $application['twig']->render('ticket/ticket_list.html.twig',array(
+            'tickets' => $tickets,
+            'categories' => $category,
+            'priority'  => $priority
+        ));
     }
 
     /**
@@ -71,8 +83,58 @@ class TicketController
 
     public function showAction($id, Application $application ,Request $request)
     {
+        $view = new \Zend_View();
+        $form = new TicketReplyForm();
+        $userId = $application['session']->get('userId');
 
-        return $application['twig']->render('ticket/ticket_show.html.twig');
+        // Kullanıcının ticketları
+        if ($application['security']->isGranted('ROLE_USER')) {
+            $ticket = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList(null,$userId, null, $id);
+            // Yöneticiye gelen ticketları listeler
+        } else if ($application['security']->isGranted('ROLE_ADMIN')) {
+            $ticket = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketList(null,null, $userId, $id);
+        }
+
+        // Desteğe ait olan kategorileri listeler
+        $ticketCategories = $application['orm.em']->getRepository('Destek\Entity\Tickets')->getTicketCategories($ticket['id']);
+        // Desteğe verilen cevaplar
+        $ticketReplies    = $application['orm.em']->getRepository('Destek\Entity\TicketReplies')->getTicketReplies($ticket['id']);
+        // Ticketı oluşturan user bilgilerini çeker.
+        $user = $application['orm.em']->getRepository('Destek\Entity\User')->findOneBy(array('id' => $ticket['owner_user_id']));
+
+        $form->setAttrib('class', 'form-horizontal');
+        $form->setAction($application['url_generator']->generate('ticket_show', array('id' => $id)));
+        $form->setView($view);
+
+        if ($request->getMethod() == 'POST') {
+            if ($form->isValid($request->request->all())) {
+                $data = $form->getValues();
+
+                $ticketReplies = new TicketReplies();
+                $ticketReplies->setTicketId($id);
+                $ticketReplies->setReplyUserId($application['session']->get('userId'));
+                $ticketReplies->setMessage($data['message']);
+                $ticketReplies->setIp($request->server->get('REMOTE_ADDR'));
+                $ticketReplies->setDeleted(false);
+                $ticketReplies->setCreatedAt(new \DateTime());
+
+                $application['orm.em']->persist($ticketReplies);
+                $application['orm.em']->flush();
+
+                $message = 'Destek cevaplandı.';
+                $application['session']->getFlashBag()->add('success', $message);
+                $redirect = $application['url_generator']->generate('ticket_show', array('id' => $id));
+                return $application->redirect($redirect);
+            }
+        }
+
+        return $application['twig']->render('ticket/ticket_show.html.twig', array(
+            'form' => $form,
+            'ticketReplies' => $ticketReplies,
+            'ticket' => $ticket,
+            'ticketCategories' => $ticketCategories,
+            'user'  => $user
+        ));
     }
 
     public function addAction(Application $application ,Request $request)
@@ -90,9 +152,6 @@ class TicketController
 
             $categoryList = $application['orm.em']->getRepository('Destek\Entity\Category')->getCategory();
 
-
-
-
             $form->setAttrib('class', 'form-horizontal');
             $form->setAction($application['url_generator']->generate('ticket_add'));
             $form->getElement('priorityId')->addMultiOptions($priorityList);
@@ -103,6 +162,7 @@ class TicketController
             if ($request->getMethod() == 'POST') {
                 if ($form->isValid($request->request->all())) {
                     $data = $form->getValues();
+
                     $ticket = new Tickets();
 
                     $ticket->setSubject($data['subject']);
@@ -146,6 +206,25 @@ class TicketController
             return $application['twig']->render('ticket/ticket_add.html.twig',array('form' => $form));
         }
 
+    }
+
+    public function _setFilter($request)
+    {
+        $filter = array();
+        if(NULL != $request->get('subject')) {
+            $filter['subject']  = $request->get('subject');
+        }
+        if(NULL !== $request->get('category') &&  $request->get('category') > 0) {
+            $filter['category'] = $request->get('category');
+        }
+        if(NULL !== $request->get('priority') && $request->get('priority') > 0) {
+            $filter['priority'] = $request->get('priority');
+        }
+        if(NULL != $request->get('date')) {
+            $filter['date'] = $request->get('date');
+        }
+
+        return $filter;
     }
 
 }
