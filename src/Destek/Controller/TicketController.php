@@ -10,7 +10,8 @@ use Destek\Entity\Category;
 use Destek\Entity\TicketCategory;
 use Destek\Form\TicketReplyForm;
 use Destek\Entity\TicketReplies;
-use Zend_Validate_File_Upload;
+use Zend_File_Transfer_Adapter_Http;
+
 
 
 
@@ -163,21 +164,37 @@ class TicketController
                 if ($form->isValid($request->request->all())) {
                     $data = $form->getValues();
 
-                    $file = $request->files->get('file');
 
 
-                    if ($file !== null) {
+                    $upload = new Zend_File_Transfer_Adapter_Http();
+                    $filename = $upload->getFileName(null,false);
 
-                        $filename = $file->getClientOriginalName();
+                    $fileName = preg_replace('/[^a-zA-Z0-9\.]/ui','', base64_encode($filename));
+                    $fileName = date('YmdHis')."_".$fileName;
 
-                         $file->move(__DIR__.'/../../../web/upload', $file->getClientOriginalName());
+                    $upload->addFilter('Rename', array('target' => '/var/www/destek-sistemi/web/' . $fileName,'overwrite' => true));
+
+                    try {
+                        // upload the file
+                        $res = $upload->receive();
+
+                        if ($res === false) {
+                            $messages = $upload->getMessages();
+
+                            //var_dump($messages);Exit;
+                            $form->addError($messages);
+
+                        }
+
+                    } catch (Zend_File_Transfer_Exception $e) {
+                        $e->getMessage();
                     }
 
                     $ticket = new Tickets();
 
                     $ticket->setSubject($data['subject']);
                     $ticket->setMessage($data['message']);
-                    $ticket->setTicketFile($filename);
+                    $ticket->setTicketFile($fileName);
                     //$ticket->setTicketFile()
                     // Yeni Destek
                     $ticket->setStatusId(1);

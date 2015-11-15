@@ -49,10 +49,11 @@ class TicketForm extends \EasyBib_Form
         $file->setLabel('File')
             ->setAttrib('enctype', 'multipart/form-data')
             ->setAttrib('accept', 'image/*')
-            ->setDestination('/var/www/html')
+            ->setAttrib('id','upload')
+            ->setDestination('/var/www/destek-sistemi/web/upload')
             ->addValidator('Count', false, 1)
-            ->addValidator('Size', false, 102400)
-            ->addValidator('Extension', false, 'jpg,png,gif');
+            ->addValidator('Size',false, 8388608 )
+            ->addValidator('Extension', false, 'png,jpg');
 
         $submit->setLabel('Kaydet')
             ->setAttrib('class', 'btn btn-lg btn-primary btn-block')
